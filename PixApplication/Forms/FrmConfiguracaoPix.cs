@@ -17,6 +17,8 @@ namespace PixApplication
 {
     public partial class FrmConfiguracaoPix : Form
     {
+        private Model.Authentication authentication = new Model.Authentication();
+        private ConfigPix configPix = new ConfigPix();
         public FrmConfiguracaoPix()
         {
             InitializeComponent();
@@ -48,15 +50,11 @@ namespace PixApplication
                         existingConfig.ChavePix = config.ChavePix;
                         existingConfig.ExpirePix = config.ExpirePix;
 
-                        // Marca o registro como modificado
                         context.ConfigPixes.Add(existingConfig);
-                        AtualizarChavePixNaAPI(existingConfig);
                     }
                     else
                     {
-                        // Caso não exista, adiciona um novo registro
                         context.ConfigPixes.Add(config);
-                        AtualizarChavePixNaAPI(config);
                     }
 
                     // Salva as mudanças no banco de dados
@@ -68,38 +66,6 @@ namespace PixApplication
             catch (Exception ex)
             {
                 MessageBox.Show("Erro ao salvar autenticação: " + ex.Message);
-            }
-        }
-
-        private async Task AtualizarChavePixNaAPI(ConfigPix config)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    string url = $"https://api.sandbox.bb.com.br/pix/v2/cob/webhook/{config.ChavePix}";
-
-                    // Serializa o objeto config em JSON
-                    var jsonContent = new StringContent(JsonConvert.SerializeObject(config.ChavePix), Encoding.UTF8, "application/json");
-
-                    // Envia a requisição PUT
-                    var response = await client.PutAsync(url, jsonContent);
-
-                    // Verifica se a requisição foi bem-sucedida
-                    if (response.IsSuccessStatusCode)
-                    {
-                        MessageBox.Show("Chave Pix atualizada com sucesso na API!");
-                    }
-                    else
-                    {
-                        string errorResponse = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show($"Erro ao atualizar chave Pix na API: {errorResponse}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao conectar na API: " + ex.Message);
             }
         }
     }

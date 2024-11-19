@@ -30,6 +30,9 @@ namespace PixApplication
         private CobrancaPix cobrancapix = new CobrancaPix();
         private int tempoExpiracaoPix;
         private int tempoRestante;
+        private string statusPix;
+        private string PixCopiaCola;
+        private string Location;
         public FrmGerarPix()
         {
             InitializeComponent();
@@ -91,7 +94,7 @@ namespace PixApplication
                 {
                     original = txtValor.Text.ToString(),
                 },
-                chave = /*"9e881f18-cc66-4fc7-8f2c-a795dbb2bfc1"*/configPix.ChavePix.ToString(),
+                chave = "9e881f18-cc66-4fc7-8f2c-a795dbb2bfc1"/*configPix.ChavePix.ToString()*/,
                 solicitacaoPagador = "Serviço realizado.",
                 infoAdicionais = new[] {
                 new { nome = "Campo 1", valor = "Informação Adicional1 do PSP-Recebedor" },
@@ -117,6 +120,9 @@ namespace PixApplication
                     string expire = resultado.calendario.expiracao;
                     string status = resultado.status;
 
+                    statusPix = status;
+                    PixCopiaCola = pixCopiaECola;
+                    Location = location;
                     tempoExpiracaoPix = Convert.ToInt32(expire);
                     tempoRestante = tempoExpiracaoPix;
 
@@ -303,7 +309,7 @@ namespace PixApplication
 
         private void btnPDF_Click(object sender, EventArgs e)
         {
-            //GerarPDF(cobrancapix.IdCobranca, string status, cobrancapix.Valor, string pixCopiaECola, string location); ;
+            GerarPDF(cobrancapix.IdCobranca, statusPix, cobrancapix.Valor.ToString(), PixCopiaCola, Location);
         }
     }
 }

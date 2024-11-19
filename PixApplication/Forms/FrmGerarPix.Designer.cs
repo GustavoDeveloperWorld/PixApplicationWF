@@ -41,6 +41,7 @@
             this.timerExpirePix = new System.Windows.Forms.Timer(this.components);
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.btnPDF = new System.Windows.Forms.Button();
+            this.btnPedido = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureQRCode)).BeginInit();
             this.SuspendLayout();
             // 
@@ -144,17 +145,27 @@
             // 
             this.btnPDF.Location = new System.Drawing.Point(116, 52);
             this.btnPDF.Name = "btnPDF";
-            this.btnPDF.Size = new System.Drawing.Size(88, 23);
+            this.btnPDF.Size = new System.Drawing.Size(75, 23);
             this.btnPDF.TabIndex = 16;
             this.btnPDF.Text = "PDF";
             this.btnPDF.UseVisualStyleBackColor = true;
             this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
+            // 
+            // btnPedido
+            // 
+            this.btnPedido.Location = new System.Drawing.Point(116, 16);
+            this.btnPedido.Name = "btnPedido";
+            this.btnPedido.Size = new System.Drawing.Size(75, 23);
+            this.btnPedido.TabIndex = 17;
+            this.btnPedido.Text = "Pedido";
+            this.btnPedido.UseVisualStyleBackColor = true;
             // 
             // FrmGerarPix
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(530, 534);
+            this.Controls.Add(this.btnPedido);
             this.Controls.Add(this.btnPDF);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.pixCopiaCola);
@@ -188,6 +199,7 @@
         private System.Windows.Forms.Timer timerExpirePix;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Button btnPDF;
+        private System.Windows.Forms.Button btnPedido;
     }
 }
 
