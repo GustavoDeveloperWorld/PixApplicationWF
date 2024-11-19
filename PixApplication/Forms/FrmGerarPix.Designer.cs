@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.txtValor = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnGerar = new System.Windows.Forms.Button();
@@ -36,12 +37,16 @@
             this.btn_Autenticar = new System.Windows.Forms.Button();
             this.checkAuthentication = new System.Windows.Forms.CheckBox();
             this.btnConfiguracao = new System.Windows.Forms.Button();
+            this.pixCopiaCola = new System.Windows.Forms.Label();
+            this.timerExpirePix = new System.Windows.Forms.Timer(this.components);
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.btnPDF = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureQRCode)).BeginInit();
             this.SuspendLayout();
             // 
             // txtValor
             // 
-            this.txtValor.Location = new System.Drawing.Point(179, 61);
+            this.txtValor.Location = new System.Drawing.Point(281, 55);
             this.txtValor.Name = "txtValor";
             this.txtValor.Size = new System.Drawing.Size(106, 20);
             this.txtValor.TabIndex = 0;
@@ -49,15 +54,16 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(139, 65);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(233, 59);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.Size = new System.Drawing.Size(42, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Valor:";
             // 
             // btnGerar
             // 
-            this.btnGerar.Location = new System.Drawing.Point(315, 54);
+            this.btnGerar.Location = new System.Drawing.Point(444, 50);
             this.btnGerar.Name = "btnGerar";
             this.btnGerar.Size = new System.Drawing.Size(63, 28);
             this.btnGerar.TabIndex = 4;
@@ -76,15 +82,16 @@
             // 
             // pictureQRCode
             // 
-            this.pictureQRCode.Location = new System.Drawing.Point(42, 97);
+            this.pictureQRCode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureQRCode.Location = new System.Drawing.Point(12, 97);
             this.pictureQRCode.Name = "pictureQRCode";
-            this.pictureQRCode.Size = new System.Drawing.Size(297, 247);
+            this.pictureQRCode.Size = new System.Drawing.Size(495, 321);
             this.pictureQRCode.TabIndex = 8;
             this.pictureQRCode.TabStop = false;
             // 
             // btn_Autenticar
             // 
-            this.btn_Autenticar.Location = new System.Drawing.Point(315, 17);
+            this.btn_Autenticar.Location = new System.Drawing.Point(444, 13);
             this.btn_Autenticar.Name = "btn_Autenticar";
             this.btn_Autenticar.Size = new System.Drawing.Size(63, 28);
             this.btn_Autenticar.TabIndex = 9;
@@ -95,7 +102,7 @@
             // checkAuthentication
             // 
             this.checkAuthentication.AutoSize = true;
-            this.checkAuthentication.Location = new System.Drawing.Point(288, 24);
+            this.checkAuthentication.Location = new System.Drawing.Point(423, 21);
             this.checkAuthentication.Name = "checkAuthentication";
             this.checkAuthentication.Size = new System.Drawing.Size(15, 14);
             this.checkAuthentication.TabIndex = 10;
@@ -103,7 +110,7 @@
             // 
             // btnConfiguracao
             // 
-            this.btnConfiguracao.Location = new System.Drawing.Point(30, 58);
+            this.btnConfiguracao.Location = new System.Drawing.Point(12, 52);
             this.btnConfiguracao.Name = "btnConfiguracao";
             this.btnConfiguracao.Size = new System.Drawing.Size(80, 23);
             this.btnConfiguracao.TabIndex = 11;
@@ -111,11 +118,46 @@
             this.btnConfiguracao.UseVisualStyleBackColor = true;
             this.btnConfiguracao.Click += new System.EventHandler(this.btnConfiguracao_Click);
             // 
+            // pixCopiaCola
+            // 
+            this.pixCopiaCola.AutoSize = true;
+            this.pixCopiaCola.Location = new System.Drawing.Point(27, 421);
+            this.pixCopiaCola.MaximumSize = new System.Drawing.Size(400, 400);
+            this.pixCopiaCola.Name = "pixCopiaCola";
+            this.pixCopiaCola.Size = new System.Drawing.Size(16, 13);
+            this.pixCopiaCola.TabIndex = 12;
+            this.pixCopiaCola.Text = "---";
+            // 
+            // timerExpirePix
+            // 
+            this.timerExpirePix.Tick += new System.EventHandler(this.timerExpirePix_Tick);
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(30, 499);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(440, 23);
+            this.progressBar.Step = 1;
+            this.progressBar.TabIndex = 15;
+            // 
+            // btnPDF
+            // 
+            this.btnPDF.Location = new System.Drawing.Point(116, 52);
+            this.btnPDF.Name = "btnPDF";
+            this.btnPDF.Size = new System.Drawing.Size(88, 23);
+            this.btnPDF.TabIndex = 16;
+            this.btnPDF.Text = "PDF";
+            this.btnPDF.UseVisualStyleBackColor = true;
+            this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
+            // 
             // FrmGerarPix
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(392, 380);
+            this.ClientSize = new System.Drawing.Size(530, 534);
+            this.Controls.Add(this.btnPDF);
+            this.Controls.Add(this.progressBar);
+            this.Controls.Add(this.pixCopiaCola);
             this.Controls.Add(this.btnConfiguracao);
             this.Controls.Add(this.checkAuthentication);
             this.Controls.Add(this.btn_Autenticar);
@@ -142,6 +184,10 @@
         private System.Windows.Forms.Button btn_Autenticar;
         private System.Windows.Forms.CheckBox checkAuthentication;
         private System.Windows.Forms.Button btnConfiguracao;
+        private System.Windows.Forms.Label pixCopiaCola;
+        private System.Windows.Forms.Timer timerExpirePix;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Button btnPDF;
     }
 }
 

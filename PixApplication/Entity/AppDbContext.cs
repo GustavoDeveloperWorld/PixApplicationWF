@@ -17,7 +17,7 @@ namespace PixApplication.Entity
         public DbSet<ConfigPix> ConfigPixes { get; set; }
         public DbSet<Authentication> Authentications { get; set; }
         public DbSet<CobrancaPix> Cobrancas { get; set; }
-
+        public DbSet<TokenResponse> TokenResponses { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Authentication
@@ -43,16 +43,16 @@ namespace PixApplication.Entity
                  .Property(a => a.Id);
 
             modelBuilder.Entity<ConfigPix>()
-                 .Property(a => a.ChavePix)
-                 .HasMaxLength(12);
+                 .Property(a => a.ChavePix);
 
             modelBuilder.Entity<ConfigPix>()
-                 .Property(a => a.Identificacao)
-                 .HasMaxLength(12);
+                 .Property(a => a.Identificacao);
 
             modelBuilder.Entity<ConfigPix>()
-            .Property(a => a.Name)
-            .HasMaxLength(12);
+                .Property(a => a.Name);
+
+            modelBuilder.Entity<ConfigPix>()
+                .Property(a => a.ExpirePix);
 
             //CobrancaPix
             modelBuilder.Entity<CobrancaPix>()
@@ -78,6 +78,20 @@ namespace PixApplication.Entity
 
             modelBuilder.Entity<CobrancaPix>()
                  .Property(a => a.DataCriacao);
+
+            //Token
+            modelBuilder.Entity<TokenResponse>()
+                 .ToTable("Token")
+                 .Property(a => a.Id);
+
+            modelBuilder.Entity<TokenResponse>()
+                 .Property(a => a.access_token);
+
+            modelBuilder.Entity<TokenResponse>()
+                 .Property(a => a.expires_in);
+
+            modelBuilder.Entity<TokenResponse>()
+                 .Property(a => a.token_type);
         }
     }
 }

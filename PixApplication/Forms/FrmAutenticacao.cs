@@ -39,7 +39,7 @@ namespace PixApplication
                     context.SaveChanges();
                 }
 
-                MessageBox.Show("Autenticação salva com sucesso!");
+                MessageBox.Show("Autenticado com sucesso!");
             }
 
             catch (Exception ex)

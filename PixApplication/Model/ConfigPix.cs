@@ -12,6 +12,7 @@ namespace PixApplication.Model
         public string Name { get; set; }
         public string Identificacao { get; set; }
         public string ChavePix { get; set; }
+        public string ExpirePix { get; set; }
 
 
     }
