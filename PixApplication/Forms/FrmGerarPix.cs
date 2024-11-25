@@ -18,6 +18,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows.Media;
+using PixApplication.Forms;
+using System.Data.Entity.Migrations;
 
 namespace PixApplication
 {
@@ -33,6 +35,7 @@ namespace PixApplication
         private string statusPix;
         private string PixCopiaCola;
         private string Location;
+        string idCobranca;
         public FrmGerarPix()
         {
             InitializeComponent();
@@ -45,6 +48,7 @@ namespace PixApplication
         {
             await GerarCobrancaAsync();
         }
+
         private async Task GerarCobrancaAsync()
         {
             var url = "https://api.sandbox.bb.com.br/pix/v2/cob";
@@ -114,7 +118,7 @@ namespace PixApplication
                     var responseData = await response.Content.ReadAsStringAsync();
                     var resultado = JsonConvert.DeserializeObject<dynamic>(responseData);
 
-                    string idCobranca = resultado.txid;
+                    idCobranca = resultado.txid;
                     string location = resultado.location;
                     string pixCopiaECola = resultado.pixCopiaECola;
                     string expire = resultado.calendario.expiracao;
@@ -153,14 +157,31 @@ namespace PixApplication
 
                     using (var context = new AppDbContext())
                     {
+                        // Adiciona a nova cobrança
                         context.Cobrancas.Add(novaCobranca);
                         context.SaveChanges();
+
+
+                        var pedido = context.Pedidos.FirstOrDefault(p => p.NumeroPedido == int.Parse(cmbPedido.Text));
+
+                        if (pedido != null)
+                        {
+                            pedido.IdCobranca = novaCobranca.IdCobranca; 
+
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Pedido não encontrado.");
+                        }
                     }
+
+
+
 
                     // Gerar o QR Code usando o link de pagamento
                     GerarQRCode(pixCopiaECola);
                     pixCopiaCola.Text = $"\nPix Copia e Cola: {pixCopiaECola}";
-                    label3.Text = status;
                 }
                 else
                 {
@@ -172,54 +193,7 @@ namespace PixApplication
             {
                 MessageBox.Show($"Erro: {ex.Message}");
             }
-        }
-
-        private void GerarPDF(string cobrancapix, string status, string valor, string pixCopiaECola, string location)
-        {
-            try
-            {
-                Document doc = new Document(PageSize.A4);
-                string pdfFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Cobranca_Pix_" + cobrancapix + ".pdf");
-
-                PdfWriter.GetInstance(doc, new FileStream(pdfFilePath, FileMode.Create));
-
-                doc.Open();
-
-                doc.Add(new Paragraph("Cobrança PIX"));
-                doc.Add(new Paragraph("-------------------------------------------------"));
-
-                doc.Add(new Paragraph($"ID da cobrança: {cobrancapix}"));
-                doc.Add(new Paragraph($"Status: {status}"));
-                doc.Add(new Paragraph($"Valor: {valor}"));
-                doc.Add(new Paragraph($"Chave Pix: {configPix.ChavePix}"));
-                doc.Add(new Paragraph($"Solicitação do pagador: Serviço realizado"));
-                doc.Add(new Paragraph($"Link de pagamento: {location}"));
-
-                doc.Add(new Paragraph("QR Code:"));
-
-                var qrGenerator = new QRCodeGenerator();
-                var qrCodeData = qrGenerator.CreateQrCode(pixCopiaECola, QRCodeGenerator.ECCLevel.Q);
-                var qrCode = new QRCode(qrCodeData);
-                using (Bitmap qrBitmap = qrCode.GetGraphic(20))
-                {
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        qrBitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(ms.ToArray());
-                        img.ScaleToFit(100f, 100f);
-                        img.Alignment = Element.ALIGN_CENTER;
-                        doc.Add(img);
-                    }
-                }
-
-                doc.Close();
-                MessageBox.Show($"PDF gerado com sucesso: {pdfFilePath}");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao gerar PDF: {ex.Message}");
-            }
-        }
+        }      
 
         private void GerarQRCode(string dados)
         {
@@ -233,6 +207,71 @@ namespace PixApplication
                     pictureQRCode.SizeMode = PictureBoxSizeMode.Zoom;
                 }
             }
+        }
+
+        private async Task<string> ConsultarStatusPixAsync(string txId)
+        {
+            // Verifique se o txId está definido
+            if (string.IsNullOrEmpty(txId))
+            {
+                throw new ArgumentException("O txId não pode ser nulo ou vazio.", nameof(txId));
+            }
+
+            // URL do endpoint com o txId
+            var url = $"https://api.sandbox.bb.com.br/pix/v2/cob/{txId}";
+            var client = new HttpClient();
+
+            // Recuperar o token de acesso
+            string accessToken;
+            using (var context = new AppDbContext())
+            {
+                accessToken = context.TokenResponses
+                                     .Select(x => x.access_token)
+                                     .FirstOrDefault();
+            }
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                throw new InvalidOperationException("Token de acesso não encontrado ou está vazio.");
+            }
+
+            // Configurar os cabeçalhos necessários
+            client.DefaultRequestHeaders.Add("gw-dev-app-key", authentication.ApplicationKey.ToString());
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+
+            try
+            {
+                // Realizar a chamada GET
+                var response = await client.GetAsync(url);
+
+                // Verificar a resposta da API
+                if (response.IsSuccessStatusCode)
+                {
+                    // Ler o conteúdo da resposta
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    var resultado = JsonConvert.DeserializeObject<dynamic>(responseData);
+
+                    // Retornar o status da cobrança
+                    return resultado.status;
+                }
+                else
+                {
+                    // Lidar com erros de API
+                    var errorData = await response.Content.ReadAsStringAsync();
+                    throw new HttpRequestException($"Erro ao consultar cobrança: {response.StatusCode} - {errorData}");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Lidar com exceções
+                throw new Exception($"Erro ao consultar status do Pix: {ex.Message}", ex);
+            }
+        }
+
+
+        private async Task CancelarCobrancaPixAsync()
+        {       
+
         }
 
         private async void btn_Autenticar_Click(object sender, EventArgs e)
@@ -273,6 +312,7 @@ namespace PixApplication
             }
 
         }
+
         private void btnConfiguracao_Click(object sender, EventArgs e)
         {
             FrmConfiguracaoPix configPix = new FrmConfiguracaoPix();
@@ -280,20 +320,47 @@ namespace PixApplication
             configPix.ShowDialog();
         }
 
-        private void timerExpirePix_Tick(object sender, EventArgs e)
+        private async void timerExpirePix_Tick(object sender, EventArgs e)
         {
             if (tempoRestante > 0)
             {
                 tempoRestante--;
                 progressBar.Value = tempoExpiracaoPix - tempoRestante;
+
+                try
+                {
+                    // Consulta o status da cobrança
+                    var novoStatus = await ConsultarStatusPixAsync(idCobranca);
+
+                    // Atualiza o status na label
+                    status.Text = novoStatus;
+
+                    // Verifica se o status mudou para "Concluído"
+                    if (novoStatus == "CONCLUIDO")
+                    {
+                        timerExpirePix.Stop();
+                        MessageBox.Show("Pagamento concluído com sucesso!");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    timerExpirePix.Stop();
+                    MessageBox.Show($"Erro ao consultar status: {ex.Message}");
+                    return;
+                }
             }
             else
             {
+                // Tempo expirado, cancela o pagamento
                 timerExpirePix.Stop();
-                MessageBox.Show("Tempo de expiração do Pix foi atingido.");
+                status.Text = "CANCELADO";
+                MessageBox.Show("Tempo de expiração do Pix atingido. Cobrança cancelada.");
+                await CancelarCobrancaPixAsync(); // Opcional: Cancela no sistema ou no banco
                 ResetarTela();
             }
         }
+
         private void ResetarTela()
         {
             progressBar.Value = 0;
@@ -302,14 +369,25 @@ namespace PixApplication
 
             pictureQRCode.Image = null;
 
-            label3.Text = "---";
+            status.Text = "---";
             txtValor.Clear();
             txtValor.Enabled = true;
         }
 
         private void btnPDF_Click(object sender, EventArgs e)
         {
-            GerarPDF(cobrancapix.IdCobranca, statusPix, cobrancapix.Valor.ToString(), PixCopiaCola, Location);
+            CobrancaPixBO.GerarPDF(cobrancapix.IdCobranca, configPix.ChavePix, statusPix, cobrancapix.Valor.ToString(), PixCopiaCola, Location);
+        }
+
+        private void btnPedido_Click(object sender, EventArgs e)
+        {
+            FrmPedido frm = new FrmPedido();
+            frm.ShowDialog();
+        }
+
+        private void status_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PixApplication.Model;
+using PixApplication.Model.Enum;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,11 +14,12 @@ namespace PixApplication.Entity
         public AppDbContext() : base("name=MeuBancoConnectionString")
         {
         }
-
         public DbSet<ConfigPix> ConfigPixes { get; set; }
         public DbSet<Authentication> Authentications { get; set; }
         public DbSet<CobrancaPix> Cobrancas { get; set; }
         public DbSet<TokenResponse> TokenResponses { get; set; }
+        public DbSet<Pedido> Pedidos { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Authentication
@@ -79,6 +81,7 @@ namespace PixApplication.Entity
             modelBuilder.Entity<CobrancaPix>()
                  .Property(a => a.DataCriacao);
 
+
             //Token
             modelBuilder.Entity<TokenResponse>()
                  .ToTable("Token")
@@ -92,6 +95,45 @@ namespace PixApplication.Entity
 
             modelBuilder.Entity<TokenResponse>()
                  .Property(a => a.token_type);
+
+            //Pedido
+            modelBuilder.Entity<Pedido>()
+                 .ToTable("Pedido")
+                 .Property(a => a.Id);
+
+            modelBuilder.Entity<Pedido>()
+                .Property(a => a.NumeroPedido);
+
+            modelBuilder.Entity<Pedido>()
+                 .Property(a => a.Valor);
+
+            modelBuilder.Entity<Pedido>()
+                .HasMany(p => p.Insumos)
+                .WithRequired(i => i.Pedido)
+                .HasForeignKey(i => i.PedidoId);
+
+            modelBuilder.Entity<Pedido>()
+                .HasOptional(p => p.Cobranca)
+                .WithOptionalPrincipal(c => c.Pedido);
+
+
+            //Insumo
+            modelBuilder.Entity<Insumo>()
+                 .ToTable("Insumo")
+                 .Property(a => a.Id);
+
+            modelBuilder.Entity<Insumo>()
+                .Property(a => a.Nome);
+
+            modelBuilder.Entity<Insumo>()
+                .Property(i => i.PedidoId)
+                .IsRequired();
+
+            modelBuilder.Entity<Insumo>()
+           .HasRequired(i => i.Pedido)
+           .WithMany(p => p.Insumos)
+           .HasForeignKey(i => i.PedidoId)
+           .WillCascadeOnDelete(false);
         }
     }
 }

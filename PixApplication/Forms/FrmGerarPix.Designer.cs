@@ -32,7 +32,7 @@
             this.txtValor = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnGerar = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.status = new System.Windows.Forms.Label();
             this.pictureQRCode = new System.Windows.Forms.PictureBox();
             this.btn_Autenticar = new System.Windows.Forms.Button();
             this.checkAuthentication = new System.Windows.Forms.CheckBox();
@@ -42,23 +42,27 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.btnPDF = new System.Windows.Forms.Button();
             this.btnPedido = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbPedido = new System.Windows.Forms.ComboBox();
+            this.pedidoBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureQRCode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pedidoBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // txtValor
             // 
-            this.txtValor.Location = new System.Drawing.Point(281, 55);
+            this.txtValor.Location = new System.Drawing.Point(279, 52);
             this.txtValor.Name = "txtValor";
-            this.txtValor.Size = new System.Drawing.Size(106, 20);
+            this.txtValor.Size = new System.Drawing.Size(108, 20);
             this.txtValor.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(233, 59);
+            this.label1.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(233, 55);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 16);
+            this.label1.Size = new System.Drawing.Size(40, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Valor:";
             // 
@@ -72,14 +76,15 @@
             this.btnGerar.UseVisualStyleBackColor = true;
             this.btnGerar.Click += new System.EventHandler(this.btnGerar_Click);
             // 
-            // label3
+            // status
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(27, 17);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(16, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "---";
+            this.status.AutoSize = true;
+            this.status.Location = new System.Drawing.Point(27, 17);
+            this.status.Name = "status";
+            this.status.Size = new System.Drawing.Size(16, 13);
+            this.status.TabIndex = 5;
+            this.status.Text = "---";
+            this.status.Click += new System.EventHandler(this.status_Click);
             // 
             // pictureQRCode
             // 
@@ -103,6 +108,7 @@
             // checkAuthentication
             // 
             this.checkAuthentication.AutoSize = true;
+            this.checkAuthentication.Enabled = false;
             this.checkAuthentication.Location = new System.Drawing.Point(423, 21);
             this.checkAuthentication.Name = "checkAuthentication";
             this.checkAuthentication.Size = new System.Drawing.Size(15, 14);
@@ -159,12 +165,40 @@
             this.btnPedido.TabIndex = 17;
             this.btnPedido.Text = "Pedido";
             this.btnPedido.UseVisualStyleBackColor = true;
+            this.btnPedido.Click += new System.EventHandler(this.btnPedido_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(222, 19);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 16);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Pedido:";
+            // 
+            // cmbPedido
+            // 
+            this.cmbPedido.DataSource = this.pedidoBindingSource;
+            this.cmbPedido.DisplayMember = "NumeroPedido";
+            this.cmbPedido.FormattingEnabled = true;
+            this.cmbPedido.Location = new System.Drawing.Point(281, 18);
+            this.cmbPedido.Name = "cmbPedido";
+            this.cmbPedido.Size = new System.Drawing.Size(106, 21);
+            this.cmbPedido.TabIndex = 19;
+            this.cmbPedido.ValueMember = "NumeroPedido";
+            // 
+            // pedidoBindingSource
+            // 
+            this.pedidoBindingSource.DataSource = typeof(PixApplication.Model.Pedido);
             // 
             // FrmGerarPix
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(530, 534);
+            this.Controls.Add(this.cmbPedido);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnPedido);
             this.Controls.Add(this.btnPDF);
             this.Controls.Add(this.progressBar);
@@ -173,13 +207,14 @@
             this.Controls.Add(this.checkAuthentication);
             this.Controls.Add(this.btn_Autenticar);
             this.Controls.Add(this.pictureQRCode);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.status);
             this.Controls.Add(this.btnGerar);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtValor);
             this.Name = "FrmGerarPix";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureQRCode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pedidoBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -190,7 +225,7 @@
         private System.Windows.Forms.TextBox txtValor;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnGerar;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label status;
         private System.Windows.Forms.PictureBox pictureQRCode;
         private System.Windows.Forms.Button btn_Autenticar;
         private System.Windows.Forms.CheckBox checkAuthentication;
@@ -200,6 +235,9 @@
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Button btnPDF;
         private System.Windows.Forms.Button btnPedido;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbPedido;
+        private System.Windows.Forms.BindingSource pedidoBindingSource;
     }
 }
 

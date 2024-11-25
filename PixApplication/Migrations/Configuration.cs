@@ -5,6 +5,7 @@
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using System.Windows.Documents;
 
     internal sealed class Configuration : DbMigrationsConfiguration<PixApplication.Entity.AppDbContext>
     {
@@ -38,22 +39,13 @@
             );
 
             // Adicionando dados iniciais à tabela ConfigPix
-                context.TokenResponses.AddOrUpdate(
+            context.TokenResponses.AddOrUpdate(
                 c => c.Id, // Chave para evitar duplicatas
                 new Model.TokenResponse { Id = 1, access_token = "access1", token_type = "type1", expires_in = 3600.0 }, // Exemplo de expires_in com valor double
                 new Model.TokenResponse { Id = 2, access_token = "access2", token_type = "type2", expires_in = 7200.0 }  // Exemplo de expires_in com valor double
             );
 
             context.SaveChanges();
-
-            //Adicionando dados iniciais à tabela TokenResponse
-            //context.TokenResponses.AddOrUpdate(
-            //   c => c.Id, // Chave para evitar duplicatas
-            //    new TokenResponse {  Id = "id1", LinkPagamento = "link1", Identificacao = "identificacao1", NomeDevedor = "nomedevedor1" },
-            //    new TokenResponse { Id = "id2", LinkPagamento = "link2", Identificacao = "identificacao2", NomeDevedor = "nomedevedor2" }
-            //);
-
-            //context.SaveChanges(); // Salva as alterações
         }
     }
 }

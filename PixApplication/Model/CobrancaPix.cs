@@ -16,6 +16,7 @@ namespace PixApplication.Model
         public string Identificacao { get; set; }
         public string NomeDevedor { get; set; }
         public DateTime? DataCriacao { get; set; }
+        public virtual Pedido Pedido { get; set; }
     }
 
 

@@ -47,7 +47,6 @@ namespace PixApplication
                 MessageBox.Show("Erro ao salvar autenticação: " + ex.Message);
             }
 
-
         }
     }
 }
