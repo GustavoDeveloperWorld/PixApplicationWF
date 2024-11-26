@@ -1,22 +1,30 @@
-﻿using iTextSharp.text.pdf.fonts.cmaps;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using PixApplication.Entity;
 using PixApplication.Model;
 using PixApplication.Model.Enum;
-using System;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace PixApplication.Forms
 {
     public partial class FrmPedido : Form
     {
+        private BindingSource _pedidoBindingSource;
+        private List<Pedido> _pedidos;
+
         public FrmPedido()
         {
             InitializeComponent();
 
-            var descricaoList = Helper.Helper.GetEnumDescriptionList<FormaPagamento>();
+            // Inicializa a lista e o BindingSource
+            _pedidos = new List<Pedido>();
+            _pedidoBindingSource = new BindingSource { DataSource = _pedidos };
 
-            // Define como DataSource
+            grdPedido.DataSource = _pedidoBindingSource;
+
+            // Configura o ComboBox
+            var descricaoList = Helper.Helper.GetEnumDescriptionList<FormaPagamento>();
             cmbFormaPagamento.DataSource = descricaoList;
             cmbFormaPagamento.DisplayMember = "Value";
             cmbFormaPagamento.ValueMember = "Key";
@@ -26,28 +34,55 @@ namespace PixApplication.Forms
         {
             try
             {
-                var pedido = new Pedido()
+                // Validações
+                if (string.IsNullOrWhiteSpace(txtInsumo.Text))
+                {
+                    MessageBox.Show("Por favor, insira o nome do insumo.");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtNumeroPedido.Text) ||
+                    string.IsNullOrWhiteSpace(txtValor.Text) ||
+                    cmbFormaPagamento.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Preencha todos os campos.");
+                    return;
+                }
+
+                // Cria um novo pedido
+                var insumos = txtInsumo.Text
+                              .Split(',')
+                              .Select(i => new Insumo { Nome = i.Trim() })
+                              .ToList();
+
+                var pedido = new Pedido
                 {
                     NumeroPedido = int.Parse(txtNumeroPedido.Text),
-                    Insumo = (System.Collections.Generic.ICollection<Insumo>)txtInsumo.Text.ToList(),
+                    Insumos = insumos,
                     Valor = decimal.Parse(txtValor.Text),
                     FormaPagamento = (FormaPagamento)Enum.Parse(typeof(FormaPagamento), cmbFormaPagamento.SelectedValue.ToString())
-
                 };
 
-                grdPedido.Rows.Add(
-               pedido.NumeroPedido,
-               pedido.Insumo,
-               pedido.Valor.ToString("C2"),
-               pedido.FormaPagamento.ToString()
-       );
-            }
+                // Adiciona o pedido na lista e atualiza o BindingSource
+                _pedidos.Add(pedido);
+                _pedidoBindingSource.ResetBindings(false);
 
+                // Limpa os campos de entrada
+                txtInsumo.Clear();
+                txtNumeroPedido.Clear();
+                txtValor.Clear();
+                cmbFormaPagamento.SelectedIndex = -1;
+
+                txtInsumo.Focus();
+
+                MessageBox.Show("Pedido adicionado à lista!");
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao salvar pedido: " + ex.Message);
+                MessageBox.Show("Erro ao adicionar pedido: " + ex.Message);
             }
         }
+
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
@@ -55,26 +90,8 @@ namespace PixApplication.Forms
             {
                 using (var context = new AppDbContext())
                 {
-                    foreach (DataGridViewRow row in grdPedido.Rows)
-                    {
-                        // Ignorar linhas não preenchidas
-                        if (row.IsNewRow) continue;
-
-                        // Criar um objeto Pedido com os valores da linhas
-                        var pedido = new Pedido
-                        {
-                            NumeroPedido = Convert.ToInt32(row.Cells["NumeroPedido"].Value),
-                            Insumo = (System.Collections.Generic.ICollection<Insumo>)row.Cells["Insumo"].Value.ToString()
-                                      .Split(',').Select(i => i.Trim()).ToList(), // Converter string de insumos para lista
-                            Valor = Convert.ToDecimal(row.Cells["Valor"].Value),
-                            FormaPagamento = (FormaPagamento)Enum.Parse(typeof(FormaPagamento), row.Cells["FormaPagamento"].Value.ToString())
-                        };
-
-                        // Adicionar ao contexto
-                        context.Pedidos.Add(pedido);
-                    }
-
-                    // Salvar mudanças no banco
+                    // Salva os pedidos no banco de dados
+                    context.Pedidos.AddRange(_pedidos);
                     context.SaveChanges();
                 }
 
@@ -85,6 +102,5 @@ namespace PixApplication.Forms
                 MessageBox.Show("Erro ao salvar pedidos: " + ex.Message);
             }
         }
-
     }
 }

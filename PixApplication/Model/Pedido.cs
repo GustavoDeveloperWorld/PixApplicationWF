@@ -11,7 +11,6 @@ namespace PixApplication.Model
     {
         public int Id { get; set; }
         public int NumeroPedido { get; set; }
-        public ICollection<Insumo> Insumo { get; set; }
         public decimal Valor { get; set; }
         public StatusPagamento StatusPagamento { get;}
         public FormaPagamento FormaPagamento { get; set; }
