@@ -30,13 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.grdPedido = new System.Windows.Forms.DataGridView();
-            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.numeroPedidoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.insumoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.valorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.statusPagamentoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.formaPagamentoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.insumosDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtInsumo = new System.Windows.Forms.TextBox();
@@ -49,6 +42,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtNumeroPedido = new System.Windows.Forms.TextBox();
             this.btnSalvar = new System.Windows.Forms.Button();
+            this.idDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.numeroPedidoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.valorDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.statusPagamentoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.formaPagamentoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.insumosDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.grdPedido)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource)).BeginInit();
             this.panel1.SuspendLayout();
@@ -61,7 +60,6 @@
             this.grdPedido.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.idDataGridViewTextBoxColumn,
             this.numeroPedidoDataGridViewTextBoxColumn,
-            this.insumoDataGridViewTextBoxColumn,
             this.valorDataGridViewTextBoxColumn,
             this.statusPagamentoDataGridViewTextBoxColumn,
             this.formaPagamentoDataGridViewTextBoxColumn,
@@ -72,52 +70,6 @@
             this.grdPedido.Name = "grdPedido";
             this.grdPedido.Size = new System.Drawing.Size(800, 317);
             this.grdPedido.TabIndex = 0;
-            // 
-            // idDataGridViewTextBoxColumn
-            // 
-            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
-            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            this.idDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // numeroPedidoDataGridViewTextBoxColumn
-            // 
-            this.numeroPedidoDataGridViewTextBoxColumn.DataPropertyName = "NumeroPedido";
-            this.numeroPedidoDataGridViewTextBoxColumn.HeaderText = "NumeroPedido";
-            this.numeroPedidoDataGridViewTextBoxColumn.Name = "numeroPedidoDataGridViewTextBoxColumn";
-            // 
-            // insumoDataGridViewTextBoxColumn
-            // 
-            this.insumoDataGridViewTextBoxColumn.DataPropertyName = "Insumo";
-            this.insumoDataGridViewTextBoxColumn.HeaderText = "Insumo";
-            this.insumoDataGridViewTextBoxColumn.Name = "insumoDataGridViewTextBoxColumn";
-            // 
-            // valorDataGridViewTextBoxColumn
-            // 
-            this.valorDataGridViewTextBoxColumn.DataPropertyName = "Valor";
-            this.valorDataGridViewTextBoxColumn.HeaderText = "Valor";
-            this.valorDataGridViewTextBoxColumn.Name = "valorDataGridViewTextBoxColumn";
-            // 
-            // statusPagamentoDataGridViewTextBoxColumn
-            // 
-            this.statusPagamentoDataGridViewTextBoxColumn.DataPropertyName = "StatusPagamento";
-            this.statusPagamentoDataGridViewTextBoxColumn.HeaderText = "StatusPagamento";
-            this.statusPagamentoDataGridViewTextBoxColumn.Name = "statusPagamentoDataGridViewTextBoxColumn";
-            this.statusPagamentoDataGridViewTextBoxColumn.ReadOnly = true;
-            this.statusPagamentoDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // formaPagamentoDataGridViewTextBoxColumn
-            // 
-            this.formaPagamentoDataGridViewTextBoxColumn.DataPropertyName = "FormaPagamento";
-            this.formaPagamentoDataGridViewTextBoxColumn.HeaderText = "FormaPagamento";
-            this.formaPagamentoDataGridViewTextBoxColumn.Name = "formaPagamentoDataGridViewTextBoxColumn";
-            this.formaPagamentoDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // insumosDataGridViewTextBoxColumn
-            // 
-            this.insumosDataGridViewTextBoxColumn.DataPropertyName = "Insumos";
-            this.insumosDataGridViewTextBoxColumn.HeaderText = "Insumos";
-            this.insumosDataGridViewTextBoxColumn.Name = "insumosDataGridViewTextBoxColumn";
             // 
             // bindingSource
             // 
@@ -179,7 +131,7 @@
             // btnAdicionar
             // 
             this.btnAdicionar.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdicionar.Location = new System.Drawing.Point(704, 63);
+            this.btnAdicionar.Location = new System.Drawing.Point(704, 28);
             this.btnAdicionar.Name = "btnAdicionar";
             this.btnAdicionar.Size = new System.Drawing.Size(75, 23);
             this.btnAdicionar.TabIndex = 8;
@@ -216,13 +168,54 @@
             // btnSalvar
             // 
             this.btnSalvar.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSalvar.Location = new System.Drawing.Point(704, 92);
+            this.btnSalvar.Location = new System.Drawing.Point(704, 64);
             this.btnSalvar.Name = "btnSalvar";
             this.btnSalvar.Size = new System.Drawing.Size(75, 23);
             this.btnSalvar.TabIndex = 12;
             this.btnSalvar.Text = "Salvar";
             this.btnSalvar.UseVisualStyleBackColor = true;
             this.btnSalvar.Click += new System.EventHandler(this.btnSalvar_Click);
+            // 
+            // idDataGridViewTextBoxColumn
+            // 
+            this.idDataGridViewTextBoxColumn.DataPropertyName = "Id";
+            this.idDataGridViewTextBoxColumn.HeaderText = "Id";
+            this.idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
+            this.idDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // numeroPedidoDataGridViewTextBoxColumn
+            // 
+            this.numeroPedidoDataGridViewTextBoxColumn.DataPropertyName = "NumeroPedido";
+            this.numeroPedidoDataGridViewTextBoxColumn.HeaderText = "NumeroPedido";
+            this.numeroPedidoDataGridViewTextBoxColumn.Name = "numeroPedidoDataGridViewTextBoxColumn";
+            // 
+            // valorDataGridViewTextBoxColumn
+            // 
+            this.valorDataGridViewTextBoxColumn.DataPropertyName = "Valor";
+            this.valorDataGridViewTextBoxColumn.HeaderText = "Valor";
+            this.valorDataGridViewTextBoxColumn.Name = "valorDataGridViewTextBoxColumn";
+            // 
+            // statusPagamentoDataGridViewTextBoxColumn
+            // 
+            this.statusPagamentoDataGridViewTextBoxColumn.DataPropertyName = "StatusPagamento";
+            this.statusPagamentoDataGridViewTextBoxColumn.HeaderText = "StatusPagamento";
+            this.statusPagamentoDataGridViewTextBoxColumn.Name = "statusPagamentoDataGridViewTextBoxColumn";
+            this.statusPagamentoDataGridViewTextBoxColumn.ReadOnly = true;
+            this.statusPagamentoDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // formaPagamentoDataGridViewTextBoxColumn
+            // 
+            this.formaPagamentoDataGridViewTextBoxColumn.DataPropertyName = "FormaPagamento";
+            this.formaPagamentoDataGridViewTextBoxColumn.HeaderText = "FormaPagamento";
+            this.formaPagamentoDataGridViewTextBoxColumn.Name = "formaPagamentoDataGridViewTextBoxColumn";
+            this.formaPagamentoDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // insumosDataGridViewTextBoxColumn
+            // 
+            this.insumosDataGridViewTextBoxColumn.DataPropertyName = "InsumosNomes";
+            this.insumosDataGridViewTextBoxColumn.HeaderText = "Insumos";
+            this.insumosDataGridViewTextBoxColumn.Name = "insumosDataGridViewTextBoxColumn";
+            this.insumosDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // FrmPedido
             // 
@@ -265,9 +258,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtNumeroPedido;
         private System.Windows.Forms.Button btnSalvar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn insumoDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn numeroPedidoDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn insumoDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn valorDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn statusPagamentoDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn formaPagamentoDataGridViewTextBoxColumn;

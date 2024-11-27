@@ -42,6 +42,18 @@ namespace PixApplication
 
             _authenticationBO = new AuthenticationBO();
 
+            AtualizarPedidos();
+        }
+
+        public void AtualizarPedidos()
+        {
+            using (var context = new AppDbContext())
+            {
+                var pedidos = context.Pedidos
+                                     .Select(p => p.NumeroPedido)
+                                     .ToList();
+                cmbPedido.DataSource = pedidos;
+            }
         }
 
         private async void btnGerar_Click(object sender, EventArgs e)
@@ -55,6 +67,7 @@ namespace PixApplication
             var client = new HttpClient();
 
             string accessToken = null;
+            Pedido pedidoSelecionado = null;
 
             using (var context = new AppDbContext())
             {
@@ -68,6 +81,11 @@ namespace PixApplication
                 authentication = context.Authentications
                                     .FirstOrDefault();
 
+                int numeroPedido;
+                if (int.TryParse(cmbPedido.Text, out numeroPedido))
+                {
+                    pedidoSelecionado = context.Pedidos.FirstOrDefault(p => p.NumeroPedido == numeroPedido);
+                }
 
             }
 
@@ -96,7 +114,7 @@ namespace PixApplication
                 },
                 valor = new
                 {
-                    original = txtValor.Text.ToString(),
+                    original = pedidoSelecionado.Valor.ToString("F2").Replace(",", "."),
                 },
                 chave = "9e881f18-cc66-4fc7-8f2c-a795dbb2bfc1"/*configPix.ChavePix.ToString()*/,
                 solicitacaoPagador = "Serviço realizado.",
@@ -145,7 +163,7 @@ namespace PixApplication
                     {
                         IdCobranca = idCobranca,
                         LinkPagamento = location,
-                        Valor = decimal.Parse(txtValor.Text.Replace(",", ".")),
+                        Valor = pedidoSelecionado.Valor,
                         Identificacao = configPix.Identificacao.Replace(".", "").Replace("-", ""),
                         NomeDevedor = configPix.Name.ToString(),
                         DataCriacao = DateTime.Now
@@ -161,8 +179,8 @@ namespace PixApplication
                         context.Cobrancas.Add(novaCobranca);
                         context.SaveChanges();
 
-
-                        var pedido = context.Pedidos.FirstOrDefault(p => p.NumeroPedido == int.Parse(cmbPedido.Text));
+                        var numPedido = int.Parse(cmbPedido.Text);
+                        var pedido = context.Pedidos.FirstOrDefault(p => p.NumeroPedido == numPedido);
 
                         if (pedido != null)
                         {
@@ -267,7 +285,6 @@ namespace PixApplication
                 throw new Exception($"Erro ao consultar status do Pix: {ex.Message}", ex);
             }
         }
-
 
         private async Task CancelarCobrancaPixAsync()
         {       
@@ -381,13 +398,8 @@ namespace PixApplication
 
         private void btnPedido_Click(object sender, EventArgs e)
         {
-            FrmPedido frm = new FrmPedido();
+            FrmPedido frm = new FrmPedido(this);
             frm.ShowDialog();
-        }
-
-        private void status_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

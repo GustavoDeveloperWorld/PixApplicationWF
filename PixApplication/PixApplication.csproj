@@ -128,6 +128,10 @@
     <Compile Include="Migrations\202411250527059_newPropertiesAndRelationship.Designer.cs">
       <DependentUpon>202411250527059_newPropertiesAndRelationship.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202411270017150_removingProperties.cs" />
+    <Compile Include="Migrations\202411270017150_removingProperties.Designer.cs">
+      <DependentUpon>202411270017150_removingProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Authentication.cs" />
     <Compile Include="Model\CobrancaPix.cs" />
@@ -171,6 +175,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202411250527059_newPropertiesAndRelationship.resx">
       <DependentUpon>202411250527059_newPropertiesAndRelationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202411270017150_removingProperties.resx">
+      <DependentUpon>202411270017150_removingProperties.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

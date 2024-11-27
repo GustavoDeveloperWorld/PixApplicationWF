@@ -84,7 +84,6 @@
             this.status.Size = new System.Drawing.Size(16, 13);
             this.status.TabIndex = 5;
             this.status.Text = "---";
-            this.status.Click += new System.EventHandler(this.status_Click);
             // 
             // pictureQRCode
             // 

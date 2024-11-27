@@ -12,11 +12,12 @@ namespace PixApplication.Forms
     {
         private BindingSource _pedidoBindingSource;
         private List<Pedido> _pedidos;
+        private FrmGerarPix _frmGerarPix;
 
-        public FrmPedido()
+        public FrmPedido(FrmGerarPix frmGerarPix)
         {
             InitializeComponent();
-
+            _frmGerarPix = frmGerarPix;
             // Inicializa a lista e o BindingSource
             _pedidos = new List<Pedido>();
             _pedidoBindingSource = new BindingSource { DataSource = _pedidos };
@@ -96,6 +97,9 @@ namespace PixApplication.Forms
                 }
 
                 MessageBox.Show("Pedidos salvos com sucesso!");
+
+                // Atualiza os pedidos no formulário de geração de Pix
+                _frmGerarPix?.AtualizarPedidos();
             }
             catch (Exception ex)
             {

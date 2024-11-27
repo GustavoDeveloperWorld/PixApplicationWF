@@ -9,6 +9,10 @@ namespace PixApplication.Model
 {
     public class Pedido
     {
+        public Pedido()
+        {
+            Insumos = new List<Insumo>();
+        }
         public int Id { get; set; }
         public int NumeroPedido { get; set; }
         public decimal Valor { get; set; }
@@ -17,6 +21,8 @@ namespace PixApplication.Model
         public ICollection<Insumo> Insumos { get; set; }
         public string IdCobranca { get; set; }
         public virtual CobrancaPix Cobranca { get; set; }
+
+        public string InsumosNomes => string.Join(", ", Insumos.Select(i => i.Nome));
 
     }
 }
